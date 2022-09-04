@@ -28,7 +28,7 @@ function generateBoard() {
     document.getElementById("gameBoard").insertAdjacentHTML(
       "beforeend",
       `
-            <img class="crystalElements column${arrCrystals[i].column} row${arrCrystals[i].row}" draggable="true" src="./assets//images/${arrCrystals[i].img}.png" alt="" />
+            <img class="crystalElements ${arrCrystals[i].img} column${arrCrystals[i].column} row${arrCrystals[i].row}" draggable="true" src="./assets//images/${arrCrystals[i].img}.png" alt="" />
         `
     );
   }
@@ -50,8 +50,9 @@ document.addEventListener("dragend", (e) => {
   const differenceX = currentX > startX ? currentX - startX : startX - currentX;
   const differenceY = currentY > startY ? currentY - startY : startY - currentY;
 
-  const column = e.target.classList[1][6];
-  const row = e.target.classList[2][3];
+  const column = e.target.classList[2][6];
+  const row = e.target.classList[3][3];
+
   const elementPositionInArr = findElementByPosition(
     Number(column),
     Number(row)
@@ -59,42 +60,106 @@ document.addEventListener("dragend", (e) => {
 
   if (differenceX >= 7 * differenceY) {
     if (currentX > startX) {
-      const element1 = arrCrystals[elementPositionInArr];
-      const element2 = arrCrystals[elementPositionInArr + 1];
+      const element1 = arrCrystals[elementPositionInArr].img;
+      const element2 = arrCrystals[elementPositionInArr + 1].img;
+      arrCrystals[elementPositionInArr].img = element2;
+      arrCrystals[elementPositionInArr + 1].img = element1;
 
-      arrCrystals.splice(elementPositionInArr, 1, element2);
-      arrCrystals.splice(elementPositionInArr + 1, 1, element1);
+      verifySequences();
 
       generateBoard();
     } else {
-      const element1 = arrCrystals[elementPositionInArr];
-      const element2 = arrCrystals[elementPositionInArr - 1];
+      const element1 = arrCrystals[elementPositionInArr].img;
+      const element2 = arrCrystals[elementPositionInArr - 1].img;
+      arrCrystals[elementPositionInArr].img = element2;
+      arrCrystals[elementPositionInArr - 1].img = element1;
 
-      arrCrystals.splice(elementPositionInArr, 1, element2);
-      arrCrystals.splice(elementPositionInArr - 1, 1, element1);
+      verifySequences();
 
       generateBoard();
     }
   } else if (differenceY >= 7 * differenceX) {
     if (currentY < startY) {
-      const element1 = arrCrystals[elementPositionInArr];
-      const element2 = arrCrystals[elementPositionInArr - 8];
+      const element1 = arrCrystals[elementPositionInArr].img;
+      const element2 = arrCrystals[elementPositionInArr - 8].img;
+      arrCrystals[elementPositionInArr].img = element2;
+      arrCrystals[elementPositionInArr - 8].img = element1;
 
-      arrCrystals.splice(elementPositionInArr, 1, element2);
-      arrCrystals.splice(elementPositionInArr - 8, 1, element1);
+      verifySequences();
 
       generateBoard();
     } else {
-      const element1 = arrCrystals[elementPositionInArr];
-      const element2 = arrCrystals[elementPositionInArr + 8];
+      const element1 = arrCrystals[elementPositionInArr].img;
+      const element2 = arrCrystals[elementPositionInArr + 8].img;
+      arrCrystals[elementPositionInArr].img = element2;
+      arrCrystals[elementPositionInArr + 8].img = element1;
 
-      arrCrystals.splice(elementPositionInArr, 1, element2);
-      arrCrystals.splice(elementPositionInArr + 8, 1, element1);
+      verifySequences();
 
       generateBoard();
     }
   }
 });
+
+function verifySequences() {
+  const arrRows = [];
+  const arrColumns = [];
+
+  for (let i = 0; i < arrCrystals.length; i++) {
+    if (arrCrystals[i].column > 2 && arrCrystals.column < 7) {
+      if (
+        arrCrystals[i].img === arrCrystals[i + 1].img &&
+        arrCrystals[i].img === arrCrystals[i + 2].img &&
+        arrCrystals[i].row === arrCrystals[i + 2].row
+      ) {
+        arrRows.push(i);
+        arrRows.push(i + 1);
+        arrRows.push(i + 2);
+      } else if (
+        arrCrystals[i].img === arrCrystals[i - 1].img &&
+        arrCrystals[i].img === arrCrystals[i - 2].img &&
+        arrCrystals[i].row === arrCrystals[i - 2].row
+      ) {
+        arrRows.push(i);
+        arrRows.push(i - 1);
+        arrRows.push(i - 2);
+      }
+    }
+
+    if (arrCrystals[i].row > 2 && arrCrystals.row < 6) {
+      if (
+        arrCrystals[i].img === arrCrystals[i + 8].img &&
+        arrCrystals[i].img === arrCrystals[i + 16].img &&
+        arrCrystals[i].column === arrCrystals[i + 18].column
+      ) {
+        arrColumns.push(i);
+        arrColumns.push(i + 8);
+        arrColumns.push(i + 16);
+      } else if (
+        arrCrystals[i].img === arrCrystals[i - 8].img &&
+        arrCrystals[i].img === arrCrystals[i - 16].img &&
+        arrCrystals[i].column === arrCrystals[i - 16].column
+      ) {
+        arrColumns.push(i);
+        arrColumns.push(i - 8);
+        arrColumns.push(i - 16);
+      }
+    }
+  }
+  console.log(arrColumns);
+  console.log(arrRows);
+
+  for (let n of arrColumns) {
+    score = score + 1;
+    n.img =
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKIOvq9TGTSWvcXSVO9dcHPBun7Z8EeClYwAVQaHAPew&s";
+  }
+  for (let n of arrRows) {
+    score = score + 1;
+    n.img =
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKIOvq9TGTSWvcXSVO9dcHPBun7Z8EeClYwAVQaHAPew&s";
+  }
+}
 
 function findElementByPosition(column, row) {
   for (let n = 0; n < arrCrystals.length; n++) {
