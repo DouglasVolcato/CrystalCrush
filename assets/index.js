@@ -24,6 +24,7 @@ function fullfillArr() {
 //gera o "tabuleiro"
 function generateBoard() {
   removeElements();
+  verifySequences();
   for (let i = 0; i < arrCrystals.length; i++) {
     document.getElementById("gameBoard").insertAdjacentHTML(
       "beforeend",
@@ -101,66 +102,40 @@ document.addEventListener("dragend", (e) => {
   }
 });
 
+//verifica por sequências e remove elementos
 function verifySequences() {
-  const arrRows = [];
-  const arrColumns = [];
+  const arrLocations = [];
 
   for (let i = 0; i < arrCrystals.length; i++) {
-    if (arrCrystals[i].column > 2 && arrCrystals.column < 7) {
+    if (i >= 2) {
       if (
-        arrCrystals[i].img === arrCrystals[i + 1].img &&
-        arrCrystals[i].img === arrCrystals[i + 2].img &&
-        arrCrystals[i].row === arrCrystals[i + 2].row
-      ) {
-        arrRows.push(i);
-        arrRows.push(i + 1);
-        arrRows.push(i + 2);
-      } else if (
         arrCrystals[i].img === arrCrystals[i - 1].img &&
-        arrCrystals[i].img === arrCrystals[i - 2].img &&
-        arrCrystals[i].row === arrCrystals[i - 2].row
+        arrCrystals[i].img === arrCrystals[i - 2].img
       ) {
-        arrRows.push(i);
-        arrRows.push(i - 1);
-        arrRows.push(i - 2);
+        arrLocations.unshift(i);
+        arrLocations.unshift(i - 1);
+        arrLocations.unshift(i - 2);
       }
     }
 
-    if (arrCrystals[i].row > 2 && arrCrystals.row < 6) {
+    if (i > 15) {
       if (
-        arrCrystals[i].img === arrCrystals[i + 8].img &&
-        arrCrystals[i].img === arrCrystals[i + 16].img &&
-        arrCrystals[i].column === arrCrystals[i + 18].column
-      ) {
-        arrColumns.push(i);
-        arrColumns.push(i + 8);
-        arrColumns.push(i + 16);
-      } else if (
         arrCrystals[i].img === arrCrystals[i - 8].img &&
-        arrCrystals[i].img === arrCrystals[i - 16].img &&
-        arrCrystals[i].column === arrCrystals[i - 16].column
+        arrCrystals[i].img === arrCrystals[i - 16].img
       ) {
-        arrColumns.push(i);
-        arrColumns.push(i - 8);
-        arrColumns.push(i - 16);
+        arrLocations.unshift(i);
+        arrLocations.unshift(i - 8);
+        arrLocations.unshift(i - 16);
       }
     }
   }
-  console.log(arrColumns);
-  console.log(arrRows);
-
-  for (let n of arrColumns) {
-    score = score + 1;
-    n.img =
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKIOvq9TGTSWvcXSVO9dcHPBun7Z8EeClYwAVQaHAPew&s";
-  }
-  for (let n of arrRows) {
-    score = score + 1;
-    n.img =
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKIOvq9TGTSWvcXSVO9dcHPBun7Z8EeClYwAVQaHAPew&s";
+  console.log(arrLocations);
+  for (let n of arrLocations) {
+    arrCrystals[n].img = "";
   }
 }
 
+//encontra um item pelas coordenadas coluna e linha
 function findElementByPosition(column, row) {
   for (let n = 0; n < arrCrystals.length; n++) {
     const item = arrCrystals[n];
@@ -170,6 +145,7 @@ function findElementByPosition(column, row) {
   }
 }
 
+//remove todos os elementos
 function removeElements() {
   const elements = document.querySelectorAll(".crystalElements");
   for (let n of elements) {
@@ -177,7 +153,7 @@ function removeElements() {
   }
 }
 
-//set row position for a div number
+//define a linha para um index
 function setRowClass(i) {
   let rowClass = 0;
   if (i >= 0 && i <= 7) {
@@ -198,7 +174,7 @@ function setRowClass(i) {
   return rowClass;
 }
 
-//set column position for a number
+//define a coluna para um index
 function setColumnClass(i) {
   let columnClass = 0;
   if (
