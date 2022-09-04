@@ -35,13 +35,13 @@ function generateBoard() {
 }
 
 //guarda as coordenadas iniciais da imagem
-document.addEventListener("touchstart", (e) => {
+document.addEventListener("dragstart", (e) => {
   selectedCrystal.x = e.clientX;
   selectedCrystal.y = e.clientY;
 });
 
 //coordenadas finais da imagem
-document.addEventListener("touchend", (e) => {
+document.addEventListener("dragend", (e) => {
   const startX = selectedCrystal.x;
   const startY = selectedCrystal.y;
   const currentX = e.clientX;
