@@ -131,9 +131,8 @@ function verifySequences() {
   }
   for (let n of arrLocations) {
     arrCrystals[n].img = "";
+    dropBoxes();
   }
-
-  dropBoxes();
 }
 
 //encontra um item pelas coordenadas coluna e linha
@@ -183,6 +182,7 @@ function generateNewItens() {
       arrCrystals[i].img = arrImages[aleatoryNumber];
     }
   }
+  verifySequences()
 }
 
 //altera a pontuação
