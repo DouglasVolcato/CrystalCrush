@@ -59,14 +59,18 @@ document.addEventListener("dragend", (e) => {
     Number(row)
   );
 
-  if (differenceX >= 7 * differenceY) {
+  if (differenceX >= 3 * differenceY) {
     if (currentX > startX) {
       const element1 = arrCrystals[elementPositionInArr].img;
       const element2 = arrCrystals[elementPositionInArr + 1].img;
       arrCrystals[elementPositionInArr].img = element2;
       arrCrystals[elementPositionInArr + 1].img = element1;
 
-      verifySequences();
+      const verification = verifySequences();
+      if (verification === false) {
+        arrCrystals[elementPositionInArr].img = element1;
+        arrCrystals[elementPositionInArr + 1].img = element2;
+      }
 
       generateBoard();
     } else {
@@ -75,18 +79,26 @@ document.addEventListener("dragend", (e) => {
       arrCrystals[elementPositionInArr].img = element2;
       arrCrystals[elementPositionInArr - 1].img = element1;
 
-      verifySequences();
+      const verification = verifySequences();
+      if (verification === false) {
+        arrCrystals[elementPositionInArr].img = element1;
+        arrCrystals[elementPositionInArr - 1].img = element2;
+      }
 
       generateBoard();
     }
-  } else if (differenceY >= 7 * differenceX) {
+  } else if (differenceY >= 3 * differenceX) {
     if (currentY < startY) {
       const element1 = arrCrystals[elementPositionInArr].img;
       const element2 = arrCrystals[elementPositionInArr - 8].img;
       arrCrystals[elementPositionInArr].img = element2;
       arrCrystals[elementPositionInArr - 8].img = element1;
 
-      verifySequences();
+      const verification = verifySequences();
+      if (verification === false) {
+        arrCrystals[elementPositionInArr].img = element1;
+        arrCrystals[elementPositionInArr - 8].img = element2;
+      }
 
       generateBoard();
     } else {
@@ -95,7 +107,11 @@ document.addEventListener("dragend", (e) => {
       arrCrystals[elementPositionInArr].img = element2;
       arrCrystals[elementPositionInArr + 8].img = element1;
 
-      verifySequences();
+      const verification = verifySequences();
+      if (verification === false) {
+        arrCrystals[elementPositionInArr].img = element1;
+        arrCrystals[elementPositionInArr + 8].img = element2;
+      }
 
       generateBoard();
     }
@@ -132,6 +148,11 @@ function verifySequences() {
   for (let n of arrLocations) {
     arrCrystals[n].img = "";
     dropBoxes();
+  }
+  if (arrLocations.length > 0) {
+    return true;
+  } else {
+    return false;
   }
 }
 
@@ -182,7 +203,7 @@ function generateNewItens() {
       arrCrystals[i].img = arrImages[aleatoryNumber];
     }
   }
-  verifySequences()
+  verifySequences();
 }
 
 //altera a pontuação
