@@ -129,10 +129,11 @@ function verifySequences() {
       }
     }
   }
-  console.log(arrLocations);
   for (let n of arrLocations) {
     arrCrystals[n].img = "";
   }
+
+  dropBoxes();
 }
 
 //encontra um item pelas coordenadas coluna e linha
@@ -151,6 +152,42 @@ function removeElements() {
   for (let n of elements) {
     n.remove();
   }
+}
+
+//faz os itens "caírem"
+function dropBoxes() {
+  for (let i = 1; i <= 7; i++) {
+    for (let i = arrCrystals.length - 1; i >= 0; i--) {
+      if (i > 7) {
+        if (arrCrystals[i].img === "") {
+          const img1 = arrCrystals[i].img;
+          const img2 = arrCrystals[i - 8].img;
+
+          arrCrystals[i].img = img2;
+          arrCrystals[i - 8].img = img1;
+        }
+      }
+    }
+  }
+
+  generateNewItens();
+}
+
+//insere novas imagens aleatórias em espaços vazios
+function generateNewItens() {
+  for (let i = arrCrystals.length - 1; i >= 0; i--) {
+    if (arrCrystals[i].img === "") {
+      score++;
+      setScore();
+      const aleatoryNumber = Math.floor(Math.random() * 5);
+      arrCrystals[i].img = arrImages[aleatoryNumber];
+    }
+  }
+}
+
+//altera a pontuação
+function setScore() {
+  document.getElementById("title").innerText = `Your score: ` + score;
 }
 
 //define a linha para um index
